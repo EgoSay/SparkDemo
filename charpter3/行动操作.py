@@ -15,6 +15,7 @@ from Init_SparkContext import MySparkContext
 
 sc = MySparkContext().open()
 rdd = sc.parallelize([121, 28, 63, 214, 88])
+
 # 记录遍历过程中的计数以及元素的数量
 
 # 第一种方法
