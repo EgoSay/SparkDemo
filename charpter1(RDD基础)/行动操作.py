@@ -28,8 +28,6 @@ print("总数:%f,平均值为:%f" % (total, average))
 
 # 第二种方法
 nums = rdd.map(lambda x: (x, 1))
-print(nums.mapValues(lambda x: print(x+1)).collect())
-
 total2 = nums.values().sum()
 average2 = nums.keys().sum() / total2
 
