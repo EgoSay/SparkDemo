@@ -63,7 +63,7 @@ def compute_pagerank(sc, url_data_file, iterations):
     ranks = lines.map(lambda line: (line[0], 1))
 
     for i in range(iterations):
-        # (url, [(neighbor_urls), rank]) join neighbor_urls and rank
+        # (url, [(neighbor_urls)]) join neighbor_urls and rank ==> (url, [(neighbor_urls), rank])
         # 把当前url的rank分别contribute到其他相邻的url (url, rank)
         contribs = links.join(ranks).flatMap(
             lambda url_urls_rank: compute_contribs(url_urls_rank[1][0], url_urls_rank[1][1])
@@ -71,7 +71,7 @@ def compute_pagerank(sc, url_data_file, iterations):
         # 把url的所有rank加起来，再赋值新的
         ranks = contribs.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
 
-    for (link, rank) in ranks.collect():
+    for (link, rank) in ranks.sortBy((lambda x: x[1]), ascending=False).collect():
         print("%s has rank %s." % (link, rank))
 
     return 0
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     # 数据文件和迭代次数
     url_data_file = '../pagerank_data.txt'
-    iterations = int(10)
+    iterations = int(8)
 
     # 配置 SparkContext
     conf = SparkConf().setAppName('PythonPageRank')
