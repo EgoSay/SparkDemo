@@ -64,7 +64,7 @@ def compute_pagerank(sc, url_data_file, iterations):
 
     for i in range(iterations):
         # (url, [(neighbor_urls)]) join neighbor_urls and rank ==> (url, [(neighbor_urls), rank])
-        # 把当前url的rank分别contribute到其他相邻的url (url, rank)
+        # url_urls_rank 相当于join后的RDD 其中一个元素(url, [(neighbor_urls), rank])
         contribs = links.join(ranks).flatMap(
             lambda url_urls_rank: compute_contribs(url_urls_rank[1][0], url_urls_rank[1][1])
         )
